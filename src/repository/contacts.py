@@ -1,0 +1,111 @@
+from typing import List
+
+from sqlalchemy.orm import Session
+from src.database.model import Contact
+
+from src.schemas import ContactBase
+
+
+async def get_contacts(db: Session) -> List[Contact]:
+    return db.query(Contact).all()
+
+
+async def get_contact(contact_id: str, db: Session) -> List[Contact]:
+    print("We are in repo.get_contact function")
+    try:
+        contact_id = int(contact_id)
+    except:
+        print("ValueError: Contact_id must be an integer")
+        return None
+    else:
+        return db.query(Contact).filter(Contact.id == contact_id).all()
+
+
+async def get_contacts_by_first_name(
+    contact_first_name: str, db: Session
+) -> List[Contact]:
+    print("We are in repo.get_contact_by_first_name function")
+    print(f"contact_first_name = {contact_first_name}")
+    contacts = db.query(Contact).filter(Contact.first_name == contact_first_name).all()
+    return contacts
+
+
+async def get_contacts_by_last_name(
+    contact_last_name: str, db: Session
+) -> List[Contact]:
+    print("We are in repo.get_contact_by_last_name function")
+    return db.query(Contact).filter(Contact.last_name == contact_last_name).all()
+
+
+async def get_contact_by_email(contact_email: str, db: Session) -> List[Contact]:
+    print("We are in repo.get_contact_by_email function")
+    return db.query(Contact).filter(Contact.email == contact_email).all()
+
+
+async def get_contacts_by(field: str, value: str, db: Session) -> List[Contact]:
+
+    fields = {
+        "id": get_contact,
+        "first_name": get_contacts_by_first_name,
+        "last_name": get_contacts_by_last_name,
+        "email": get_contact_by_email,
+    }
+
+    if field in fields.keys():
+        print(value)
+        print(type(value))
+        contacts = await fields[field](value, db)
+    else:
+        print("There is no such field")
+        contacts = []
+
+    return contacts
+
+
+async def create_new_contact(body: ContactBase, db: Session) -> Contact:
+    print("We are in repo.create_new_contact function")
+    contact = Contact(
+        first_name=body.first_name.lower(),
+        last_name=body.last_name.lower(),
+        email=body.email.lower(),
+        phone=body.phone,
+        born_date=body.born_date,
+        additional=body.additional,
+    )
+    db.add(contact)
+    db.commit()
+    db.refresh(contact)
+    return contact
+
+    #     __tablename__ = "contacts"
+    # id = Column(Integer, primary_key=True, autoincrement=True)
+    # first_name = Column(String(50), nullable=False)
+    # last_name = Column(String(50), nullable=False)
+    # email = Column(String(50), nullable=False)
+    # phone = Column(String(15), nullable=False)
+    # born_date = Column(DateTime)
+    # additional = Column(String(200), nullable=True)
+
+
+async def update_contact(contact_id: int, body: ContactBase, db: Session):
+    print("We are in repo.update_contact function")
+    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+    if contact:
+        contact.first_name = body.first_name.lower()
+        contact.last_name = body.last_name.lower()
+        contact.email = body.email.lower()
+        contact.phone = body.phone
+        contact.born_date = body.born_date
+        contact.additional = body.additional
+
+        db.commit()
+    return contact
+
+
+async def remove_contact(contact_id: int, db: Session):
+    print("We are in repo.remove_contact function")
+    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+    if contact:
+        db.delete(contact)
+        db.commit()
+    return contact
