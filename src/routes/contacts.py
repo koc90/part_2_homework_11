@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import FastAPI, Path, Query, Depends, APIRouter, HTTPException, status
+from fastapi import Query, Depends, APIRouter, HTTPException, status
 from sqlalchemy.orm import Session
 from src.database.db import get_db
 from src.schemas import ContactBase, ContactResponse
