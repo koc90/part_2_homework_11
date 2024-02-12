@@ -79,15 +79,6 @@ async def create_new_contact(body: ContactBase, db: Session) -> Contact:
     db.refresh(contact)
     return contact
 
-    #     __tablename__ = "contacts"
-    # id = Column(Integer, primary_key=True, autoincrement=True)
-    # first_name = Column(String(50), nullable=False)
-    # last_name = Column(String(50), nullable=False)
-    # email = Column(String(50), nullable=False)
-    # phone = Column(String(15), nullable=False)
-    # born_date = Column(DateTime)
-    # additional = Column(String(200), nullable=True)
-
 
 async def update_contact(contact_id: int, body: ContactBase, db: Session):
     print("We are in repo.update_contact function")

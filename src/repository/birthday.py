@@ -14,7 +14,6 @@ def get_id_birthday_upcoming(dates_id_list: list[tuple[datetime, int]]) -> list[
         contact_id = date_tuple[1]
         born_day = born_date.day
         born_month = born_date.month
-        # print(born_date, born_day, born_month)
 
         closest_birthday = datetime(
             year=this_year, month=born_month, day=born_day
