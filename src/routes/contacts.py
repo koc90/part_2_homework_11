@@ -36,6 +36,14 @@ async def display_all_contacts(db: Session = Depends(get_db)):
     return contacts
 
 
+@router.get("/birthday", response_model=List[ContactResponse])
+async def display_contacts_with_upcoming_birthay(db: Session = Depends(get_db)):
+    print("We are in routes.display_contacts_with_upcoming_birthay function")
+    contacts = await contact_repo.get_contact_with_upcoming_birtday(db)
+    print(contacts)
+    return contacts
+
+
 @router.post("/", response_model=ContactResponse)
 async def add_new_contact(body: ContactBase, db: Session = Depends(get_db)):
     print("We are in routes.add_new_contact function")

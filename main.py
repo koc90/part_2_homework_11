@@ -11,10 +11,11 @@ app.include_router(contacts.router, prefix="/api")
 @app.get("/")
 def read_root():
     dict_to_return = {
-        "AppName": "Contacts",
+        "AppName": "Contacts - lowercase",
         "Documentation": "/docs",
-        "Display all contacts": "/contacts/all",
-        "Display contact": "/contacts/?field=field_name&value=value",
+        "Display all contacts": "api/contacts/all",
+        "Display contacts with birthday upcoming": "api/contacts/birthday",
+        "Display contact": "api/contacts/?field=field_name&value=value",
         "field_name": ["id", "first_name", "last_name", "email"],
     }
 

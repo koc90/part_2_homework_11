@@ -1,9 +1,11 @@
 from typing import List
 
 from sqlalchemy.orm import Session
-from src.database.model import Contact
 
+from src.database.model import Contact
 from src.schemas import ContactBase
+
+from src.repository.birthday import get_id_birthday_upcoming
 
 
 async def get_contacts(db: Session) -> List[Contact]:
@@ -70,7 +72,7 @@ async def create_new_contact(body: ContactBase, db: Session) -> Contact:
         email=body.email.lower(),
         phone=body.phone,
         born_date=body.born_date,
-        additional=body.additional,
+        additional=body.additional.lower(),
     )
     db.add(contact)
     db.commit()
@@ -96,7 +98,7 @@ async def update_contact(contact_id: int, body: ContactBase, db: Session):
         contact.email = body.email.lower()
         contact.phone = body.phone
         contact.born_date = body.born_date
-        contact.additional = body.additional
+        contact.additional = body.additional.lower()
 
         db.commit()
     return contact
@@ -109,3 +111,14 @@ async def remove_contact(contact_id: int, db: Session):
         db.delete(contact)
         db.commit()
     return contact
+
+
+async def get_contact_with_upcoming_birtday(db: Session):
+    print("We are in repo.get_contact_with_upcoming_birtday function")
+
+    born_dates = db.query(Contact).values(Contact.born_date, Contact.id)
+
+    id_list = get_id_birthday_upcoming(born_dates)
+    contacts = db.query(Contact).filter(Contact.id.in_(id_list)).all()
+
+    return contacts
