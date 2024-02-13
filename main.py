@@ -16,7 +16,7 @@ def read_root():
         "Display all contacts": "api/contacts/",
         "Display contact": "api/contacts/{contact_id: int}",
         "Display contacts with birthday upcoming": "api/contacts/birthday",
-        "Display contact by choosen field": "api/contacts/?field=field_name&value=value",
+        "Display contact by choosen field": "api/contacts/byfield?field=field_name&value=value",
         "field_name": ["id", "first_name", "last_name", "email"],
     }
 
