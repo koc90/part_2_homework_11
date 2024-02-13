@@ -32,7 +32,7 @@ def get_id_birthday_upcoming(dates_id_list: list[tuple[datetime, int]]) -> list[
     return id_list
 
 
-def get_404(contacts):
+def get_no_contacts_exception(contacts):
 
     if bool(contacts) == False:
         raise HTTPException(
