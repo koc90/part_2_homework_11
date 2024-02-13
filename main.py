@@ -13,9 +13,10 @@ def read_root():
     dict_to_return = {
         "AppName": "Contacts - lowercase",
         "Documentation": "/docs",
-        "Display all contacts": "api/contacts/all",
+        "Display all contacts": "api/contacts/",
+        "Display contact": "api/contacts/{contact_id: int}",
         "Display contacts with birthday upcoming": "api/contacts/birthday",
-        "Display contact": "api/contacts/?field=field_name&value=value",
+        "Display contact by choosen field": "api/contacts/?field=field_name&value=value",
         "field_name": ["id", "first_name", "last_name", "email"],
     }
 

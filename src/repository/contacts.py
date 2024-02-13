@@ -12,8 +12,14 @@ async def get_contacts(db: Session) -> List[Contact]:
     return db.query(Contact).all()
 
 
-async def get_contact(contact_id: str, db: Session) -> List[Contact]:
+async def get_contact(contact_id: int, db: Session) -> Contact:
     print("We are in repo.get_contact function")
+    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+    return contact
+
+
+async def get_contact_by_id(contact_id: str, db: Session) -> List[Contact]:
+    print("We are in repo.get_contact_by_id function")
     try:
         contact_id = int(contact_id)
     except:
@@ -47,7 +53,7 @@ async def get_contact_by_email(contact_email: str, db: Session) -> List[Contact]
 async def get_contacts_by(field: str, value: str, db: Session) -> List[Contact]:
 
     fields = {
-        "id": get_contact,
+        "id": get_contact_by_id,
         "first_name": get_contacts_by_first_name,
         "last_name": get_contacts_by_last_name,
         "email": get_contact_by_email,
@@ -80,9 +86,9 @@ async def create_new_contact(body: ContactBase, db: Session) -> Contact:
     return contact
 
 
-async def update_contact(contact_id: int, body: ContactBase, db: Session):
+async def update_contact(contact: Contact, body: ContactBase, db: Session):
     print("We are in repo.update_contact function")
-    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+
     if contact:
         contact.first_name = body.first_name.lower()
         contact.last_name = body.last_name.lower()
@@ -95,16 +101,15 @@ async def update_contact(contact_id: int, body: ContactBase, db: Session):
     return contact
 
 
-async def remove_contact(contact_id: int, db: Session):
+async def remove_contact(contact: Contact, db: Session):
     print("We are in repo.remove_contact function")
-    contact = db.query(Contact).filter(Contact.id == contact_id).first()
     if contact:
         db.delete(contact)
         db.commit()
     return contact
 
 
-async def get_contact_with_upcoming_birtday(db: Session):
+async def get_contacts_with_upcoming_birtday(db: Session):
     print("We are in repo.get_contact_with_upcoming_birtday function")
 
     born_dates = db.query(Contact).values(Contact.born_date, Contact.id)
