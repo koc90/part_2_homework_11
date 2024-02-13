@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from fastapi import status, HTTPException
+
 
 def get_id_birthday_upcoming(dates_id_list: list[tuple[datetime, int]]) -> list[int]:
 
@@ -28,3 +30,11 @@ def get_id_birthday_upcoming(dates_id_list: list[tuple[datetime, int]]) -> list[
             id_list.append(contact_id)
 
     return id_list
+
+
+def get_404(contacts):
+
+    if bool(contacts) == False:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="No contact found"
+        )

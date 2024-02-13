@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from src.database.model import Contact
 from src.schemas import ContactBase
 
-from src.repository.birthday import get_id_birthday_upcoming
+from src.repository.added_features import get_id_birthday_upcoming
 
 
 async def get_contacts(db: Session) -> List[Contact]:
